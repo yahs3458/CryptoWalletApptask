@@ -6,15 +6,23 @@ import TokenList, { tokens } from '../components/TokenList';
 import TokenItem from '../components/TokenItem'; // Create this for single token row
 import Header from '../components/Header';
 import BottomTabBar from '../components/BottomTabs';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../navigation/RootNavigator';
 
-const HomeScreen = () => {
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+
+interface HomeScreenProps {
+  navigation: HomeScreenNavigationProp;
+}
+
+const HomeScreen = ({ navigation }: HomeScreenProps) => {
   return (
     <><Header
       title=""
       leftIcon={require('../assets/icons/settings.png')}
       rightIcon={require('../assets/icons/scan.png')}
-      onLeftPress={() => console.log('Filter')}
-      onRightPress={() => console.log('Scan')} />
+      onLeftPress={() => navigation.navigate('Exchange')}
+      onRightPress={() => navigation.navigate('QrScreen')} />
       
       <LinearGradient
         colors={['#252531', '#181826']}

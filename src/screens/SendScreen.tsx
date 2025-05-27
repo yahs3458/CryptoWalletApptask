@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Modal } from 'react-native';
 import BottomTabBar from '../components/BottomTabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,20 +6,47 @@ import LinearGradient from 'react-native-linear-gradient';
 import Header from '../components/Header';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/RootNavigator';
-
+import { RouteProp } from '@react-navigation/native';
 
 type SendScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Send'>;
+type SendScreenRouteProp = RouteProp<RootStackParamList, 'Send'>;
 
 interface SendScreenProps {
   navigation: SendScreenNavigationProp;
+  route: SendScreenRouteProp;
 }
 
-const SendScreen = ({ navigation }: SendScreenProps) => {
+const SendScreen = ({ navigation, route }: SendScreenProps) => {
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState<'BTC' | 'USD'>('BTC');
-  const [addressVisible, setAddressVisible] = useState(false);
+  const [addressVisible, setAddressVisible] = useState(true);
   const [scannedAddress, setScannedAddress] = useState('');
-  const [showScanner, setShowScanner] = useState(false);
+  const [recipientName, setRecipientName] = useState('');
+
+  const extractWalletAddress = (qrValue: string): string => {
+    try {
+      // Try to parse the QR value as JSON
+      const qrData = JSON.parse(qrValue);
+      if (qrData && qrData.address) {
+        return qrData.address;
+      }
+    } catch (error) {
+      // If parsing fails, return the original value
+      return qrValue;
+    }
+    return '';
+  };
+
+  useEffect(() => {
+    if (route.params?.recipientAddress) {
+      const address = extractWalletAddress(route.params.recipientAddress);
+      setScannedAddress(address);
+      setAddressVisible(true);
+    }
+    if (route.params?.recipientName) {
+      setRecipientName(route.params.recipientName);
+    }
+  }, [route.params]);
 
   // Simulated wallet balance
   const btcBalance = 0.05;
@@ -30,8 +57,6 @@ const SendScreen = ({ navigation }: SendScreenProps) => {
   const remainingBalance = currency === 'BTC'
     ? (btcBalance - numericAmount)
     : (usdBalance - numericAmount);
-
-
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -46,6 +71,13 @@ const SendScreen = ({ navigation }: SendScreenProps) => {
           onLeftPress={() => navigation.goBack()}
         />
         <View style={styles.contentContainer}>
+          {/* Recipient Info */}
+          {recipientName && (
+            <View style={styles.recipientContainer}>
+              <Text style={styles.recipientName}>{recipientName}</Text>
+            </View>
+          )}
+
           {/* Coin icon and title */}
           <View style={styles.centered}>
             <Image source={require('../assets/tokensicon/bitwhite.png')} style={styles.coinIcon} />
@@ -97,7 +129,13 @@ const SendScreen = ({ navigation }: SendScreenProps) => {
             </View>
 
             {/* Continue Button */}
-            <TouchableOpacity style={styles.continueButton} onPress={() => setShowScanner(true)}>
+            <TouchableOpacity 
+              style={styles.continueButton} 
+              onPress={() => navigation.navigate('TransferSuccess', {
+                amount: amount,
+                currency: currency
+              })}
+            >
               <Text style={styles.continueText}>Continue</Text>
             </TouchableOpacity>
           </View>
@@ -105,12 +143,12 @@ const SendScreen = ({ navigation }: SendScreenProps) => {
           {/* BTC Address */}
           {addressVisible && (
             <View style={styles.addressContainer}>
-              <Text style={styles.addressLabel}>Address</Text>
+              <Text style={styles.addressLabel}>Recipient Address</Text>
               <View style={styles.addressBox}>
                 <Text style={styles.addressText}>
-                  {scannedAddress || '98A5...BECB4FDBF990A89DF199'}
+                  {scannedAddress || '98A5BECB4FDBF990A89DF199'}
                 </Text>
-                <TouchableOpacity onPress={() => setShowScanner(true)}>
+                <TouchableOpacity onPress={() => navigation.navigate('QrScreen')}>
                   <Image source={require('../assets/icons/scan.png')} style={styles.copyIcon} />
                 </TouchableOpacity>
               </View>
@@ -119,8 +157,6 @@ const SendScreen = ({ navigation }: SendScreenProps) => {
         </View>
       </LinearGradient>
       <BottomTabBar />
-
-    
     </SafeAreaView>
   );
 };
@@ -284,6 +320,15 @@ const styles = StyleSheet.create({
   continueText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: '600',
+  },
+  recipientContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  recipientName: {
+    color: '#fff',
+    fontSize: 18,
     fontWeight: '600',
   },
 });

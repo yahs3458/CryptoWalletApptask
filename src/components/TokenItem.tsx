@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList, RootStackNavigationProp } from '../navigationTypes';
 
 export type TokenItemProps = {
   item: {
@@ -14,33 +16,38 @@ export type TokenItemProps = {
 };
 
 const TokenItem: React.FC<TokenItemProps> = ({ item }) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+
+  const handlePress = () => {
+    navigation.navigate('CurrencyDetail', { currencyName: item.name });
+  };
   return (
-    <View style={styles.tokenRow}>
-      <View style={styles.leftSection}>
-        <Image source={item.icon} style={styles.icon} />
-        <View>
-          <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.symbol}>{item.symbol}</Text>
-        </View>
-      </View>
-
-      <View style={styles.centerSection}>
-        <Text style={styles.price}>{item.price}</Text>
-        <Text
-          style={[
-            styles.change,
-            { color: item.change >= 0 ? '#4CAF50' : '#F44336' },
-          ]}
-        >
-          {item.change >= 0 ? '▲' : '▼'} {Math.abs(item.change).toFixed(2)}%
-        </Text>
-      </View>
-
-      <View style={styles.rightSection}>
-        <Text style={styles.amount}>{item.amount}</Text>
-        <Text style={styles.usd}>{item.usdValue}</Text>
+    <TouchableOpacity style={styles.tokenRow} onPress={handlePress}>
+    <View style={styles.leftSection}>
+      <Image source={item.icon} style={styles.icon} />
+      <View>
+        <Text style={styles.name}>{item.name}</Text>
+        <Text style={styles.symbol}>{item.symbol}</Text>
       </View>
     </View>
+
+    <View style={styles.centerSection}>
+      <Text style={styles.price}>{item.price}</Text>
+      <Text
+        style={[
+          styles.change,
+          { color: item.change >= 0 ? '#4CAF50' : '#F44336' },
+        ]}
+      >
+        {item.change >= 0 ? '▲' : '▼'} {Math.abs(item.change).toFixed(2)}%
+      </Text>
+    </View>
+
+    <View style={styles.rightSection}>
+      <Text style={styles.amount}>{item.amount}</Text>
+      <Text style={styles.usd}>{item.usdValue}</Text>
+    </View>
+  </TouchableOpacity>
   );
 };
 

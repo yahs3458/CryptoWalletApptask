@@ -57,32 +57,34 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-      },
-  icon: {
-    width: 20,
-    height: 20,
-    marginHorizontal: 4,
-    tintColor: '#AAA', // Soft gray look
-  },
-  center: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  title: {
-    color: '#AAA',
-    fontSize: 14,
-    fontWeight: '600',
-    marginRight: 6,
-  },
-  centerIcon: {
-    width: 16,
-    height: 16,
-    tintColor: '#AAA',
-  },
-  rightContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+    },
+    icon: {
+        width: 20,
+        height: 20,
+        marginHorizontal: 4,
+        tintColor: '#AAA', // Soft gray look
+    },
+    center: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
+    },
+    title: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '600',
+        marginRight: 6,
+    },
+    centerIcon: {
+        width: 16,
+        height: 16,
+        tintColor: '#AAA',
+    },
+    rightContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
 });
 
 export default Header;
