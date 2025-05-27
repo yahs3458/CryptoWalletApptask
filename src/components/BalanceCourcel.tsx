@@ -6,7 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 
 const {width} = Dimensions.get('window');
-type NavigationProp = StackNavigationProp<RootStackParamList, 'Home'>
+type NavigationProp = StackNavigationProp<RootStackParamList, 'Main'>
 const ActionButton = ({ label, onPress }: { label: string, onPress: () => void }) => {
     const getIcon = () => {
       switch(label) {
@@ -74,7 +74,7 @@ const BalanceCourcel = () => {
                         {isBalanceVisible ? item.balance : '****'}
                     </Text>
                     <View style={styles.buttonRow}>
-                    <ActionButton label="SEND" onPress={() => console.log("Send Pressed")} />
+                    <ActionButton label="SEND" onPress={() => navigation.navigate('Send')} />
             <ActionButton label="RECEIVE" onPress={() => navigation.navigate('Receive')} />
             <ActionButton label="BUY" onPress={() => console.log("Buy Pressed")} />
                     </View>

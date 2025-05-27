@@ -63,10 +63,10 @@ const OnboardingScreen = ({navigation}: any) => {
                 ))}
             </Swiper>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('Main')}>
+                <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('Home')}>
                     <Text style={styles.primaryButtonText}>Create a new wallet</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.secondaryButton} onPress={() => navigation.navigate('Main')}>
+                <TouchableOpacity style={styles.secondaryButton} onPress={() => navigation.navigate('Home')}>
                     <Text style={styles.secondaryButtonText}>I already have a wallet</Text>
                 </TouchableOpacity>
             </View>

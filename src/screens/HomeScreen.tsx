@@ -5,6 +5,7 @@ import BalanceCarousel from '../components/BalanceCourcel';
 import TokenList, { tokens } from '../components/TokenList';
 import TokenItem from '../components/TokenItem'; // Create this for single token row
 import Header from '../components/Header';
+import BottomTabBar from '../components/BottomTabs';
 
 const HomeScreen = () => {
   return (
@@ -30,6 +31,7 @@ const HomeScreen = () => {
             ListHeaderComponent={<BalanceCarousel />}
             contentContainerStyle={styles.listContent} />
         </SafeAreaView>
+        <BottomTabBar />
       </LinearGradient></>
   );
 };
